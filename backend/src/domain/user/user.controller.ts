@@ -1,4 +1,6 @@
-import {Controller, Get} from '@nestjs/common';
+import {Controller, Get, HttpCode, HttpStatus, Query} from '@nestjs/common';
+
+import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 
 import {UserService} from './user.service';
 
@@ -7,8 +9,9 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    public async getAll() {
-        const users = await this.userService.getAllUsers();
+    @HttpCode(HttpStatus.OK)
+    public async getAll(@Query() query: PageOptionsDto) {
+        const users = await this.userService.getAllUsers(query);
 
         return users;
     }

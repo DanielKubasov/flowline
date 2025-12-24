@@ -1,7 +1,7 @@
 import {Body, Controller, Post} from '@nestjs/common';
 
-import {Public} from '@/core/decorators/public.decorator';
 import {UserEntity} from '@/domain/user/user.entity';
+import {Public} from '@/shared/decorators/public.decorator';
 
 import {AuthService} from './auth.service';
 import {SignInDTO} from './dto/sign-in.dto';

@@ -1,8 +1,8 @@
 import {Module} from '@nestjs/common';
 import {APP_GUARD} from '@nestjs/core';
 
-import {AuthGuard} from '@/core/guards/auth.guard';
 import {UserModule} from '@/domain/user/user.module';
+import {AuthGuard} from '@/shared/guards/auth.guard';
 
 import {AuthController} from './auth.controller';
 import {AuthService} from './auth.service';
