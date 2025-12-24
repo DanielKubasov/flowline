@@ -10,7 +10,7 @@ import {InjectRepository} from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import {Repository} from 'typeorm';
 
-import {UserEntity} from '@/domain/user/user.entity';
+import {UserEntity} from '@/domain/user/entities/user.entity';
 
 import {SignInDto} from './dto/sign-in.dto';
 import {SignUpDto} from './dto/sign-up.dto';

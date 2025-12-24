@@ -1,7 +1,7 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {IsNotEmpty, IsString} from 'class-validator';
 
-import {UserEntity} from '@/domain/user/user.entity';
+import {UserEntity} from '@/domain/user/entities/user.entity';
 
 export class SignInDto implements Partial<UserEntity> {
     @IsString()

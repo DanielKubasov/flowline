@@ -7,7 +7,7 @@ import {
     Length
 } from 'class-validator';
 
-import {UserEntity} from '@/domain/user/user.entity';
+import {UserEntity} from '@/domain/user/entities/user.entity';
 
 export class SignUpDto implements Partial<UserEntity> {
     @IsString()

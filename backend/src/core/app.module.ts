@@ -2,9 +2,10 @@ import {Module} from '@nestjs/common';
 import {JwtModule} from '@nestjs/jwt';
 import {TypeOrmModule} from '@nestjs/typeorm';
 
+import {UserModule} from '@/domain/user/user.module';
+import {WorkspaceModule} from '@/domain/workspace/workspace.module';
 import {AuthModule} from '@/infrastructure/auth/auth.module';
 
-import {UserModule} from '../domain/user/user.module';
 import {configService} from '../infrastructure/config/config.service';
 
 @Module({
@@ -18,7 +19,8 @@ import {configService} from '../infrastructure/config/config.service';
             }
         }),
         AuthModule,
-        UserModule
+        UserModule,
+        WorkspaceModule
     ],
     controllers: [],
     providers: []

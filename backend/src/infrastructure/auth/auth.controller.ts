@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Patch, Post} from '@nestjs/common';
 
-import {UserEntity} from '@/domain/user/user.entity';
+import {UserEntity} from '@/domain/user/entities/user.entity';
 import {Public} from '@/shared/decorators/public.decorator';
 import {User} from '@/shared/decorators/user.decorator';
 

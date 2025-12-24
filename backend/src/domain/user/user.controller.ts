@@ -10,7 +10,7 @@ import {
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 
-import {UserEntity} from './user.entity';
+import {UserEntity} from './entities/user.entity';
 import {UserService} from './user.service';
 
 @Controller('users')

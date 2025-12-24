@@ -6,7 +6,7 @@ import {PageMetaDto} from '@/shared/dto/page-meta.dto';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 
-import {UserEntity} from './user.entity';
+import {UserEntity} from './entities/user.entity';
 
 @Injectable()
 export class UserService {
