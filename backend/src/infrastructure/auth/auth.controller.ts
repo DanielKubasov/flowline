@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Patch, Post} from '@nestjs/common';
 
 import {UserEntity} from '@/domain/user/user.entity';
 import {Public} from '@/shared/decorators/public.decorator';
@@ -7,6 +7,7 @@ import {User} from '@/shared/decorators/user.decorator';
 import {AuthService} from './auth.service';
 import {SignInDto} from './dto/sign-in.dto';
 import {SignUpDto} from './dto/sign-up.dto';
+import {UpdateProfileDto} from './dto/update-profile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,5 +28,13 @@ export class AuthController {
     @Delete('/deactivate')
     public deactivateAccount(@User() user: UserEntity): Promise<boolean> {
         return this.authService.deactivateAccount(user);
+    }
+
+    @Patch('/update-profile')
+    public updateProfile(
+        @Body() dto: UpdateProfileDto,
+        @User() user: UserEntity
+    ): Promise<boolean> {
+        return this.authService.updateProfile(dto, user.id);
     }
 }

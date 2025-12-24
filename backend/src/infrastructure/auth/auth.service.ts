@@ -14,6 +14,7 @@ import {UserEntity} from '@/domain/user/user.entity';
 
 import {SignInDto} from './dto/sign-in.dto';
 import {SignUpDto} from './dto/sign-up.dto';
+import {UpdateProfileDto} from './dto/update-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,13 +31,12 @@ export class AuthService {
         dto: SignInDto
     ): Promise<UserEntity & {access_token: string}> {
         const user = await this.userRepository.findOne({
-            where: [
-                {username: dto.username},
-                {email: dto.username},
-                {isActive: true},
-                {isArchived: false}
-            ]
+            where: [{username: dto.username, isActive: true, isArchived: false}]
         });
+
+        if (!user) {
+            throw new BadRequestException('Invalid credentials.');
+        }
 
         const isPasswordCorrect = await argon2.verify(
             user?.password as string,
@@ -45,10 +45,6 @@ export class AuthService {
 
         if (!isPasswordCorrect) {
             throw new BadRequestException('Invalid password.');
-        }
-
-        if (!user) {
-            throw new BadRequestException('Invalid credentials.');
         }
 
         const payload = {sub: user.id};
@@ -99,6 +95,33 @@ export class AuthService {
         } as UserEntity & {access_token: string};
     }
 
+    public async updateProfile(
+        dto: UpdateProfileDto,
+        id: string
+    ): Promise<boolean> {
+        const old = await this.userRepository.findOne({
+            where: {id}
+        });
+
+        if (!old) {
+            throw new InternalServerErrorException('Internal server error.');
+        }
+
+        if (dto?.username) {
+            const existingUserWithUsername = await this.userRepository.findOne({
+                where: {username: dto.username}
+            });
+
+            if (existingUserWithUsername) {
+                throw new ConflictException('The username is already taken.');
+            }
+        }
+
+        await this.userRepository.save({...old, ...dto});
+
+        return true;
+    }
+
     public async deactivateAccount(user: UserEntity): Promise<boolean> {
         const old = await this.userRepository.findOne({
             where: {id: user.id}
@@ -106,6 +129,10 @@ export class AuthService {
 
         if (!old) {
             throw new InternalServerErrorException('Internal server error.');
+        }
+
+        if (!old.isActive) {
+            throw new BadRequestException('User is already deactivated.');
         }
 
         await this.userRepository.save({

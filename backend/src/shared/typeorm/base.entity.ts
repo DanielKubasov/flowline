@@ -1,4 +1,5 @@
 // base.entity.ts
+import {Exclude} from 'class-transformer';
 import {
     Column,
     CreateDateColumn,
@@ -11,9 +12,11 @@ export abstract class BaseEntity {
     id: string;
 
     @Column({type: 'boolean', default: true})
+    @Exclude()
     isActive: boolean;
 
     @Column({type: 'boolean', default: false})
+    @Exclude()
     isArchived: boolean;
 
     @CreateDateColumn({type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP'})
