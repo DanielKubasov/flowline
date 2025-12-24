@@ -12,8 +12,8 @@ import {Repository} from 'typeorm';
 
 import {UserEntity} from '@/domain/user/user.entity';
 
-import {SignInDTO} from './dto/sign-in.dto';
-import {SignUpDTO} from './dto/sign-up.dto';
+import {SignInDto} from './dto/sign-in.dto';
+import {SignUpDto} from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,10 +27,15 @@ export class AuthService {
     ) {}
 
     public async signIn(
-        dto: SignInDTO
+        dto: SignInDto
     ): Promise<UserEntity & {access_token: string}> {
         const user = await this.userRepository.findOne({
-            where: [{username: dto.username}, {email: dto.username}]
+            where: [
+                {username: dto.username},
+                {email: dto.username},
+                {isActive: true},
+                {isArchived: false}
+            ]
         });
 
         const isPasswordCorrect = await argon2.verify(
@@ -58,7 +63,7 @@ export class AuthService {
     }
 
     public async signUp(
-        dto: SignUpDTO
+        dto: SignUpDto
     ): Promise<UserEntity & {access_token: string}> {
         const oldUser = await this.userRepository.findOne({
             where: [{username: dto.username}, {email: dto.email}]
@@ -92,5 +97,23 @@ export class AuthService {
             ...newUser,
             access_token: await this.jwtService.signAsync(payload)
         } as UserEntity & {access_token: string};
+    }
+
+    public async deactivateAccount(user: UserEntity): Promise<boolean> {
+        const old = await this.userRepository.findOne({
+            where: {id: user.id}
+        });
+
+        if (!old) {
+            throw new InternalServerErrorException('Internal server error.');
+        }
+
+        await this.userRepository.save({
+            ...old,
+            isActive: false,
+            isArchived: true
+        });
+
+        return true;
     }
 }

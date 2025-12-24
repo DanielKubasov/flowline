@@ -3,7 +3,7 @@ import {IsNotEmpty, IsString} from 'class-validator';
 
 import {UserEntity} from '@/domain/user/user.entity';
 
-export class SignInDTO implements Partial<UserEntity> {
+export class SignInDto implements Partial<UserEntity> {
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

@@ -9,7 +9,7 @@ import {
 
 import {UserEntity} from '@/domain/user/user.entity';
 
-export class SignUpDTO implements Partial<UserEntity> {
+export class SignUpDto implements Partial<UserEntity> {
     @IsString()
     @Length(4, 32)
     @IsNotEmpty()

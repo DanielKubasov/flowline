@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 
@@ -27,9 +27,23 @@ export class UserService {
             where: [{isActive: true}, {isArchived: false}]
         });
 
-        const itemCount = await this.userRepository.count();
+        const itemCount = await this.userRepository.count({
+            where: [{isActive: true}, {isArchived: false}]
+        });
         const pageMetaDto = new PageMetaDto({itemCount, pageOptionsDto});
 
         return new PageDto(users, pageMetaDto);
+    }
+
+    public async getUserById(id: string): Promise<UserEntity> {
+        const user = await this.userRepository.findOne({
+            where: [{isActive: true}, {isArchived: false}, {id}]
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found.');
+        }
+
+        return user;
     }
 }

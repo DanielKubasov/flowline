@@ -1,7 +1,16 @@
-import {Controller, Get, HttpCode, HttpStatus, Query} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Query
+} from '@nestjs/common';
 
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
+import {PageDto} from '@/shared/dto/page.dto';
 
+import {UserEntity} from './user.entity';
 import {UserService} from './user.service';
 
 @Controller('users')
@@ -10,9 +19,18 @@ export class UserController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    public async getAll(@Query() query: PageOptionsDto) {
+    public async getAll(
+        @Query() query: PageOptionsDto
+    ): Promise<PageDto<UserEntity>> {
         const users = await this.userService.getAllUsers(query);
 
         return users;
+    }
+
+    @Get(':id')
+    public async getOneById(@Param('id') id: string): Promise<UserEntity> {
+        const user = await this.userService.getUserById(id);
+
+        return user;
     }
 }
