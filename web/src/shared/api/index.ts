@@ -10,9 +10,7 @@ const $api = axios.create({
 
 $api.interceptors.request.use(async config => {
     const store = await cookies();
-    const token = await store.get('accessToken')?.value;
-
-    console.log(token);
+    const token = store.get('accessToken')?.value;
 
     config.headers.set('Authorization', `Bearer ${token}`);
 

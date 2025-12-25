@@ -21,14 +21,12 @@ async function signIn(data: any): Promise<any> {
 
 async function POST(req: NextRequest) {
     const body = await req.json();
-
-    console.log(body);
-
     const data = await signIn(body);
 
     console.log(data);
 
     const res = NextResponse.json(JSON.stringify(data));
+
     res.cookies.set('accessToken', data?.accessToken);
 
     return res;
