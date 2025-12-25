@@ -21,7 +21,6 @@ export class AuthService {
     private logger = new Logger();
 
     public constructor(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
         private readonly jwtService: JwtService
@@ -29,7 +28,7 @@ export class AuthService {
 
     public async signIn(
         dto: SignInDto
-    ): Promise<UserEntity & {access_token: string}> {
+    ): Promise<UserEntity & {accessToken: string}> {
         const user = await this.userRepository.findOne({
             where: [{username: dto.username, isActive: true, isArchived: false}]
         });
@@ -39,7 +38,7 @@ export class AuthService {
         }
 
         const isPasswordCorrect = await argon2.verify(
-            user?.password as string,
+            user?.password,
             dto.password
         );
 
@@ -54,8 +53,8 @@ export class AuthService {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            access_token: await this.jwtService.signAsync(payload)
-        } as UserEntity & {access_token: string};
+            accessToken: await this.jwtService.signAsync(payload)
+        } as UserEntity & {accessToken: string};
     }
 
     public async signUp(

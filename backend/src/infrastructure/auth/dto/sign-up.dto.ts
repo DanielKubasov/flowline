@@ -1,11 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {
-    IsEmail,
-    IsNotEmpty,
-    IsString,
-    IsStrongPassword,
-    Length
-} from 'class-validator';
+import {IsEmail, IsNotEmpty, IsString, Length} from 'class-validator';
 
 import {UserEntity} from '@/domain/user/entities/user.entity';
 
@@ -17,7 +11,6 @@ export class SignUpDto implements Partial<UserEntity> {
     public username: string;
 
     @IsString()
-    @IsStrongPassword()
     @Length(8, 64)
     @IsNotEmpty()
     @ApiProperty()
