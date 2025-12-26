@@ -1,6 +1,7 @@
 import {TypeOrmModuleOptions} from '@nestjs/typeorm';
 import dotenv from 'dotenv';
 
+import {ProjectEntity} from '@/domain/project/entities/project.entity';
 import {UserEntity} from '@/domain/user/entities/user.entity';
 import {WorkspaceEntity} from '@/domain/workspace/entities/workspace.entity';
 
@@ -41,7 +42,7 @@ class ConfigService {
             username: this.get<string>('POSTGRES_USER'),
             password: this.get<string>('POSTGRES_PASSWORD'),
             database: this.get<string>('POSTGRES_DATABASE'),
-            entities: [UserEntity, WorkspaceEntity],
+            entities: [UserEntity, WorkspaceEntity, ProjectEntity],
             migrationsTableName: 'migration',
             migrations: [__dirname + '/src/migrations/*.ts'],
             autoLoadEntities: true,

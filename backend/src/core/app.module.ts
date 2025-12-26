@@ -2,6 +2,7 @@ import {Module} from '@nestjs/common';
 import {JwtModule} from '@nestjs/jwt';
 import {TypeOrmModule} from '@nestjs/typeorm';
 
+import {ProjectModule} from '@/domain/project/project.module';
 import {UserModule} from '@/domain/user/user.module';
 import {WorkspaceModule} from '@/domain/workspace/workspace.module';
 import {AuthModule} from '@/infrastructure/auth/auth.module';
@@ -20,7 +21,8 @@ import {configService} from '../infrastructure/config/config.service';
         }),
         AuthModule,
         UserModule,
-        WorkspaceModule
+        WorkspaceModule,
+        ProjectModule
     ],
     controllers: [],
     providers: []
