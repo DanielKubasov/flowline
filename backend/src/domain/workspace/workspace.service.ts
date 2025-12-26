@@ -6,6 +6,8 @@ import {PageMetaDto} from '@/shared/dto/page-meta.dto';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 
+import {UserEntity} from '../user/entities/user.entity';
+
 import {WorkspaceDto} from './dto/workspace.dto';
 import {WorkspaceEntity} from './entities/workspace.entity';
 
@@ -25,7 +27,10 @@ export class WorkspaceService {
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true}, {isArchived: false}]
+            where: [{isActive: true}, {isArchived: false}],
+            relations: {
+                user: true
+            }
         });
 
         const itemCount = await this.workspaceRepository.count({
@@ -48,7 +53,10 @@ export class WorkspaceService {
         return workspace;
     }
 
-    public async createWorkspace(dto: WorkspaceDto): Promise<WorkspaceEntity> {
+    public async createWorkspace(
+        dto: WorkspaceDto,
+        user: UserEntity
+    ): Promise<WorkspaceEntity> {
         const old = await this.workspaceRepository.findOne({
             where: {name: dto.name}
         });
@@ -59,7 +67,10 @@ export class WorkspaceService {
             );
         }
 
-        const workspace = await this.workspaceRepository.save(dto);
+        const workspace = await this.workspaceRepository.save({
+            ...dto,
+            user: {id: user.id}
+        });
 
         return workspace;
     }

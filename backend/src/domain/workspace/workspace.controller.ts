@@ -9,8 +9,11 @@ import {
     Query
 } from '@nestjs/common';
 
+import {User} from '@/shared/decorators/user.decorator';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
+
+import {UserEntity} from '../user/entities/user.entity';
 
 import {WorkspaceDto} from './dto/workspace.dto';
 import {WorkspaceEntity} from './entities/workspace.entity';
@@ -34,7 +37,10 @@ export class WorkspaceController {
     }
 
     @Post()
-    public createOne(@Body() dto: WorkspaceDto): Promise<WorkspaceEntity> {
-        return this.workspaceService.createWorkspace(dto);
+    public createOne(
+        @Body() dto: WorkspaceDto,
+        @User() user: UserEntity
+    ): Promise<WorkspaceEntity> {
+        return this.workspaceService.createWorkspace(dto, user);
     }
 }

@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 
 import {Public} from '@/shared/decorators/public.decorator';
+import {User} from '@/shared/decorators/user.decorator';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 

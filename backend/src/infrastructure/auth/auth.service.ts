@@ -46,7 +46,7 @@ export class AuthService {
             throw new BadRequestException('Invalid password.');
         }
 
-        const payload = {sub: user.id};
+        const payload = {sub: user.id, id: user.id};
 
         return {
             username: user.username,
@@ -141,5 +141,15 @@ export class AuthService {
         });
 
         return true;
+    }
+
+    public async whoami(id: string): Promise<UserEntity> {
+        const user = await this.userRepository.findOneBy({id});
+
+        if (!user) {
+            throw new InternalServerErrorException('Internal server error.');
+        }
+
+        return user;
     }
 }

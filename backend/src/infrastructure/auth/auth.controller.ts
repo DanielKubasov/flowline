@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Patch, Post} from '@nestjs/common';
 
 import {UserEntity} from '@/domain/user/entities/user.entity';
 import {Public} from '@/shared/decorators/public.decorator';
@@ -36,5 +36,10 @@ export class AuthController {
         @User() user: UserEntity
     ): Promise<boolean> {
         return this.authService.updateProfile(dto, user.id);
+    }
+
+    @Get('/whoami')
+    public whoami(@User('id') id: string) {
+        return this.authService.whoami(id);
     }
 }
