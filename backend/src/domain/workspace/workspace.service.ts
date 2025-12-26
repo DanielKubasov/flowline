@@ -15,7 +15,9 @@ import {WorkspaceEntity} from './entities/workspace.entity';
 export class WorkspaceService {
     public constructor(
         @InjectRepository(WorkspaceEntity)
-        private readonly workspaceRepository: Repository<WorkspaceEntity>
+        private readonly workspaceRepository: Repository<WorkspaceEntity>,
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>
     ) {}
 
     public async getAllWorkspaces(
@@ -55,7 +57,7 @@ export class WorkspaceService {
 
     public async createWorkspace(
         dto: WorkspaceDto,
-        user: UserEntity
+        userId: string
     ): Promise<WorkspaceEntity> {
         const old = await this.workspaceRepository.findOne({
             where: {name: dto.name}
@@ -67,10 +69,45 @@ export class WorkspaceService {
             );
         }
 
+        const user = await this.userRepository.findOneBy({id: userId});
+
+        if (!user) {
+            throw new NotFoundException('User not found.');
+        }
+
         const workspace = await this.workspaceRepository.save({
             ...dto,
-            user: {id: user.id}
+            user
         });
+
+        return workspace;
+    }
+
+    public async updateWorkspace(
+        dto: WorkspaceDto,
+        id: string
+    ): Promise<WorkspaceEntity> {
+        const old = await this.workspaceRepository.findOneBy({id});
+
+        if (!old) {
+            throw new NotFoundException('Workspace not found.');
+        }
+
+        const data = {...old, ...dto};
+
+        await this.workspaceRepository.save(data);
+
+        return data;
+    }
+
+    public async deactivateWorkspace(id: string): Promise<WorkspaceEntity> {
+        const workspace = await this.workspaceRepository.findOneBy({id});
+
+        if (!workspace) {
+            throw new NotFoundException('Workspace not found.');
+        }
+
+        await this.workspaceRepository.delete({id});
 
         return workspace;
     }
