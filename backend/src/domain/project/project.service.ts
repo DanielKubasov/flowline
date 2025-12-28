@@ -29,7 +29,7 @@ export class ProjectService {
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true}, {isArchived: false}],
+            where: [{isActive: true, isArchived: false}],
             relations: {workspace: true}
         });
 

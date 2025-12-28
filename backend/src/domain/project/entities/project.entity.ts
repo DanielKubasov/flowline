@@ -1,6 +1,7 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {Column, Entity, ManyToOne} from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
 
+import {TaskEntity} from '@/domain/task/entities/task.entity';
 import {WorkspaceEntity} from '@/domain/workspace/entities/workspace.entity';
 import {BaseEntity} from '@/shared/typeorm/base.entity';
 
@@ -8,6 +9,9 @@ import {BaseEntity} from '@/shared/typeorm/base.entity';
 export class ProjectEntity extends BaseEntity {
     @ManyToOne(() => WorkspaceEntity, w => w.projects)
     public workspace: WorkspaceEntity;
+
+    @OneToMany(() => TaskEntity, t => t.project)
+    public tasks: TaskEntity[];
 
     @Column({type: 'varchar', length: 64, unique: true, nullable: false})
     @ApiProperty()

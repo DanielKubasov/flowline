@@ -24,7 +24,7 @@ export class UserService {
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true}, {isArchived: false}]
+            where: [{isActive: true, isArchived: false}]
         });
 
         const itemCount = await this.userRepository.count({
@@ -37,7 +37,7 @@ export class UserService {
 
     public async getUserById(id: string): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
-            where: [{isActive: true}, {isArchived: false}, {id}]
+            where: [{isActive: true, isArchived: false, id}]
         });
 
         if (!user) {

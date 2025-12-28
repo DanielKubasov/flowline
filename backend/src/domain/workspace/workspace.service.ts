@@ -29,14 +29,14 @@ export class WorkspaceService {
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true}, {isArchived: false}],
+            where: [{isActive: true, isArchived: false}],
             relations: {
                 user: true
             }
         });
 
         const itemCount = await this.workspaceRepository.count({
-            where: [{isActive: true}, {isArchived: false}]
+            where: [{isActive: true, isArchived: false}]
         });
         const pageMetaDto = new PageMetaDto({itemCount, pageOptionsDto});
 
