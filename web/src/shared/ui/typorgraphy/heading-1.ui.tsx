@@ -2,7 +2,7 @@ import {cn} from '@/shared/utils';
 import React from 'react';
 
 type Heading1Props = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     className?: string;
 };
 

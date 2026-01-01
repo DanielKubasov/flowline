@@ -1,7 +1,17 @@
+import {UserType} from '@/entities/user';
+import {ErrorResponse} from '@/shared/api/errors';
 import {API_URL} from '@/shared/constants';
+import {respondWithError} from '@/shared/utils';
 import {NextRequest, NextResponse} from 'next/server';
 
-async function signIn(data: any): Promise<any> {
+type SignInPayload = {
+    username: string;
+    password: string;
+};
+
+type SignInResponse = UserType & {accessToken: string};
+
+async function signIn(data: SignInPayload): Promise<SignInResponse> {
     const res = await fetch(`${API_URL}/auth/sign-in`, {
         method: 'POST',
         headers: {
@@ -13,23 +23,29 @@ async function signIn(data: any): Promise<any> {
     if (!res.ok) {
         const body = await res.json();
 
-        return body;
+        throw new ErrorResponse(body);
     }
 
     return res.json();
 }
 
 async function POST(req: NextRequest) {
-    const body = await req.json();
-    const data = await signIn(body);
+    try {
+        const body = await req.json();
+        const data = await signIn(body);
 
-    console.log(data);
+        const res = NextResponse.json(data, {status: 200});
 
-    const res = NextResponse.json(JSON.stringify(data));
+        res.cookies.set('accessToken', data.accessToken);
 
-    res.cookies.set('accessToken', data?.accessToken);
+        return res;
+    } catch (err: unknown) {
+        if (err instanceof ErrorResponse) {
+            return NextResponse.json(err, {status: err.statusCode});
+        }
 
-    return res;
+        return respondWithError();
+    }
 }
 
 export {POST};

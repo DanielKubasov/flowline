@@ -20,6 +20,7 @@ import {signInFormSchema} from '../schemas/sign-in.schema';
 import Link from 'next/link';
 import {toast} from 'sonner';
 import {redirect} from 'next/navigation';
+import {AuthAlter, Github, Google} from '@/shared/ui';
 
 const SignInForm = () => {
     const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -64,7 +65,7 @@ const SignInForm = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className='max-w-[500px] space-y-8'
+                className='w-[400px] space-y-6'
             >
                 <FormField
                     control={form.control}
@@ -92,9 +93,17 @@ const SignInForm = () => {
                         </FormItem>
                     )}
                 />
-                <div className='flex items-center gap-8'>
+
+                <AuthAlter>Or continue with</AuthAlter>
+
+                <div className='flex flex-col gap-2'>
+                    <Github />
+                    <Google />
+                </div>
+
+                <div className='flex items-center justify-between gap-8'>
                     <Button type='submit'>Sign in</Button>
-                    <Link className='text-blue-600' href='/auth/sign-up'>
+                    <Link className='text-gray-400' href='/auth/sign-up'>
                         Don&apos;t have an account?
                     </Link>
                 </div>

@@ -12,7 +12,8 @@ async function bootstrap() {
     const logger = new Logger();
 
     const config = {
-        port: configService.getPort()
+        port: configService.getPort(),
+        origins: configService.get<string>('ALLOWED_ORIGINS')?.split(',') || []
     };
 
     const swagger = new DocumentBuilder()
@@ -30,6 +31,18 @@ async function bootstrap() {
     app.setGlobalPrefix('/api/v1');
     app.useGlobalPipes(new ValidationPipe({transform: true}));
     app.useGlobalFilters(new HttpExceptionFilter());
+
+    app.enableCors({
+        origin: (origin: string, callback) => {
+            if (!origin || config.origins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+        credentials: true // Allow cookies and auth headers
+    });
 
     await app.listen(config.port, () => {
         logger.verbose(
