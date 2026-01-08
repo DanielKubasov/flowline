@@ -1,20 +1,22 @@
-import axios from 'axios';
 import {API_URL} from '@/shared/constants';
 
 import {cookies} from 'next/headers';
 
-const $api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true
-});
-
-$api.interceptors.request.use(async config => {
+const $fetch = async (
+    url: string,
+    options?: RequestInit
+): Promise<Response> => {
     const store = await cookies();
     const token = store.get('accessToken')?.value;
 
-    config.headers.set('Authorization', `Bearer ${token}`);
+    const apiUrl = API_URL + url;
+    const headers = {Authorization: `Bearer ${token}`};
+    const config = {
+        headers,
+        ...options
+    };
 
-    return config;
-});
+    return fetch(apiUrl, config);
+};
 
-export {$api};
+export {$fetch};

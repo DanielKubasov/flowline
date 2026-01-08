@@ -1,15 +1,9 @@
 import type {Metadata} from 'next';
-import {Google_Sans_Flex} from 'next/font/google';
 
 // @ts-expect-error - This line will contain an error
-import '@/shared/styles/globals.css';
+import '@/core/styles/index.css';
 
 import {Toaster} from 'sonner';
-
-const googleSansFlex = Google_Sans_Flex({
-    variable: '--font-google-sans-flex',
-    subsets: ['latin']
-});
 
 export const metadata: Metadata = {
     title: 'Flowline',
@@ -23,7 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={googleSansFlex.className}>
+            <body>
                 {children}
 
                 <Toaster />

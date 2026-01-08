@@ -1,36 +1,7 @@
-import {UserType} from '@/entities/user';
-import {ErrorResponse} from '@/shared/api/errors';
-import {API_URL} from '@/shared/constants';
-import {respondWithError} from '@/shared/utils';
 import {NextRequest, NextResponse} from 'next/server';
 
-type SignUpPayload = {
-    email: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    password: string;
-};
-
-type SignUpResponse = UserType & {accessToken: string};
-
-async function signUp(data: SignUpPayload): Promise<SignUpResponse> {
-    const res = await fetch(`${API_URL}/auth/sign-up`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-
-    if (!res.ok) {
-        const body = await res.json();
-
-        throw new ErrorResponse(body);
-    }
-
-    return res.json();
-}
+import {ErrorResponse} from '@/server/errors';
+import {respondWithError, signUp} from '@/server/utils';
 
 async function POST(req: NextRequest) {
     try {

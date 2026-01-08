@@ -1,18 +1,25 @@
-import {SignUpForm} from '@/features/sign-up-form';
-import {Heading1} from '@/shared/ui/typorgraphy/heading-1.ui';
-import {Paragraph} from '@/shared/ui/typorgraphy/paragraph.ui';
+import {SignInForm} from '@/features/auth';
+import {Heading2} from '@/shared/ui/typography/heading-2.ui';
+import {Paragraph} from '@/shared/ui/typography/paragraph.ui';
+import Link from 'next/link';
 
 const SignUpView = () => {
     return (
-        <>
-            <hgroup className='text-center mb-8'>
-                <Heading1 className='mb-4'>Sign up</Heading1>
-                <Paragraph>
-                    Enter your information to create an account
-                </Paragraph>
-            </hgroup>
-            <SignUpForm />
-        </>
+        <div className='w-[450px] bg-background p-12 rounded-xl'>
+            <div className='mb-12 text-center'>
+                <Heading2 className='!text-3xl'>Sign up</Heading2>
+                <Paragraph>Sign in to start using the app</Paragraph>
+                <div className='w-full h-0.5 bg-muted my-8'></div>
+            </div>
+            <SignInForm />
+            <div className='w-full h-0.5 bg-muted my-8'></div>
+            <Paragraph className='text-center'>
+                Already have an account?{' '}
+                <Link className='text-primary' href='/auth/sign-in'>
+                    Sign in.
+                </Link>
+            </Paragraph>
+        </div>
     );
 };
 

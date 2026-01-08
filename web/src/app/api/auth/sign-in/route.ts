@@ -1,37 +1,12 @@
-import {UserType} from '@/entities/user';
-import {ErrorResponse} from '@/shared/api/errors';
-import {API_URL} from '@/shared/constants';
-import {respondWithError} from '@/shared/utils';
 import {NextRequest, NextResponse} from 'next/server';
 
-type SignInPayload = {
-    username: string;
-    password: string;
-};
-
-type SignInResponse = UserType & {accessToken: string};
-
-async function signIn(data: SignInPayload): Promise<SignInResponse> {
-    const res = await fetch(`${API_URL}/auth/sign-in`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-
-    if (!res.ok) {
-        const body = await res.json();
-
-        throw new ErrorResponse(body);
-    }
-
-    return res.json();
-}
+import {ErrorResponse} from '@/server/errors';
+import {respondWithError, signIn} from '@/server/utils';
 
 async function POST(req: NextRequest) {
     try {
         const body = await req.json();
+        console.log(body);
         const data = await signIn(body);
 
         const res = NextResponse.json(data, {status: 200});
