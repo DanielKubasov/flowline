@@ -1,16 +1,15 @@
 'use client';
 
-import {Button} from '@/shared/ui/button.ui';
+import {Button} from '@/shared/ui/button';
 import {
     Form,
     FormField,
     FormItem,
     FormLabel,
     FormControl,
-    FormDescription,
     FormMessage
-} from '@/shared/ui/form.ui';
-import {Input} from '@/shared/ui/input.ui';
+} from '@/shared/ui/form';
+import {Input} from '@/shared/ui/input';
 import {useForm} from 'react-hook-form';
 import z from 'zod';
 import {signInSchema} from '../schema/sign-in';
@@ -48,7 +47,7 @@ const SignInForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
                 <FormField
                     control={form.control}
                     name='username'

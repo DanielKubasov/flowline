@@ -1,4 +1,4 @@
-import {Toaster} from '@/shared/ui/toast.ui';
+import {Toaster} from '@/shared/ui/toast';
 
 export default function AuthLayout({
     children

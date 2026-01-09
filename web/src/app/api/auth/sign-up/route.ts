@@ -8,7 +8,9 @@ async function POST(req: NextRequest) {
         const body = await req.json();
         const data = await signUp(body);
 
-        const res = NextResponse.json(data);
+        const res = NextResponse.json(data, {status: 200});
+
+        console.log(data.accessToken);
 
         res.cookies.set('accessToken', data.accessToken);
 

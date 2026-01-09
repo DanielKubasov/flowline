@@ -1,10 +1,19 @@
-// UI
+// Typography
 
-export * from './avatar.ui';
-export * from './auth-alter.ui';
-export * from './terms-of-service.ui';
+export * from './typography/heading-1';
+export * from './typography/heading-2';
+export * from './typography/heading-3';
 
-// Socials
+export * from './typography/paragraph';
 
-export * from './socials/github.ui';
-export * from './socials/google.ui';
+// UI Components
+
+export * from './avatar';
+export * from './button';
+export * from './dropdown-menu';
+export * from './form';
+export * from './input';
+export * from './label';
+export * from './toast';
+export * from './tabs';
+export * from './table';

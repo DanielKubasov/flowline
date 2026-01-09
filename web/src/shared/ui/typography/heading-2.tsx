@@ -8,10 +8,7 @@ type Heading2Props = {
 
 const Heading2 = ({children, className, ...props}: Heading2Props) => {
     return (
-        <h2
-            className={cn(className, 'text-2xl font-bold text-gray-800')}
-            {...props}
-        >
+        <h2 className={cn(className, 'text-2xl text-gray-800')} {...props}>
             {children}
         </h2>
     );

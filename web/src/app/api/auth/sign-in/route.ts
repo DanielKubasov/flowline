@@ -6,7 +6,6 @@ import {respondWithError, signIn} from '@/server/utils';
 async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        console.log(body);
         const data = await signIn(body);
 
         const res = NextResponse.json(data, {status: 200});

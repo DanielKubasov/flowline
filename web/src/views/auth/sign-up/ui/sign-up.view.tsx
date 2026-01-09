@@ -1,6 +1,6 @@
-import {SignInForm} from '@/features/auth';
-import {Heading2} from '@/shared/ui/typography/heading-2.ui';
-import {Paragraph} from '@/shared/ui/typography/paragraph.ui';
+import {SignUpForm} from '@/features/auth';
+import {Heading2} from '@/shared/ui/typography/heading-2';
+import {Paragraph} from '@/shared/ui/typography/paragraph';
 import Link from 'next/link';
 
 const SignUpView = () => {
@@ -11,7 +11,7 @@ const SignUpView = () => {
                 <Paragraph>Sign in to start using the app</Paragraph>
                 <div className='w-full h-0.5 bg-muted my-8'></div>
             </div>
-            <SignInForm />
+            <SignUpForm />
             <div className='w-full h-0.5 bg-muted my-8'></div>
             <Paragraph className='text-center'>
                 Already have an account?{' '}
