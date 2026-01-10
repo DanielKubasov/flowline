@@ -1,6 +1,7 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {Column, Entity, Index, OneToMany} from 'typeorm';
 
+import {TaskEntity} from '@/domain/task/entities/task.entity';
 import {WorkspaceEntity} from '@/domain/workspace/entities/workspace.entity';
 import {BaseEntity} from '@/shared/typeorm/base.entity';
 
@@ -30,4 +31,7 @@ export class UserEntity extends BaseEntity {
 
     @OneToMany(() => WorkspaceEntity, w => w.user)
     public workspaces: WorkspaceEntity[];
+
+    @OneToMany(() => TaskEntity, t => t.assignee)
+    public users: UserEntity[];
 }

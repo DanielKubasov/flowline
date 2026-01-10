@@ -1,11 +1,11 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import {IsDateString, IsOptional, IsString, IsUUID} from 'class-validator';
 
 import {TaskDto} from './task.dto';
 
 export class UpdateTaskDto implements Partial<TaskDto> {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty()
     public name: string;
 
@@ -13,4 +13,24 @@ export class UpdateTaskDto implements Partial<TaskDto> {
     @IsOptional()
     @ApiProperty()
     public description: string;
+
+    @IsDateString()
+    @IsOptional()
+    @ApiProperty()
+    public dueDate: Date;
+
+    @IsUUID()
+    @IsOptional()
+    @ApiProperty()
+    public assigneeId: string;
+
+    @IsUUID()
+    @IsOptional()
+    @ApiProperty()
+    public projectId: string;
+
+    @IsUUID()
+    @IsOptional()
+    @ApiProperty()
+    public statusId: string;
 }

@@ -10,9 +10,11 @@ import {AuthModule} from '@/infrastructure/auth/auth.module';
 
 import {configService} from '../infrastructure/config/config.service';
 
+import {getTypeOrmConfig} from './configs/typeorm.config';
+
 @Module({
     imports: [
-        TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+        TypeOrmModule.forRoot(getTypeOrmConfig()),
         JwtModule.register({
             global: true,
             secret: configService.get<any>('JWT_ACCESS_SECRET'),

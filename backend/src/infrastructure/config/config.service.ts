@@ -1,10 +1,4 @@
-import {TypeOrmModuleOptions} from '@nestjs/typeorm';
 import dotenv from 'dotenv';
-
-import {ProjectEntity} from '@/domain/project/entities/project.entity';
-import {TaskEntity} from '@/domain/task/entities/task.entity';
-import {UserEntity} from '@/domain/user/entities/user.entity';
-import {WorkspaceEntity} from '@/domain/workspace/entities/workspace.entity';
 
 dotenv.config();
 
@@ -33,23 +27,6 @@ class ConfigService {
     public isProduction(): boolean {
         const mode = this.get('MODE', false);
         return mode != 'dev';
-    }
-
-    public getTypeOrmConfig(): TypeOrmModuleOptions {
-        return {
-            type: 'postgres',
-            host: this.get<string>('POSTGRES_HOST'),
-            port: parseInt(this.get<string>('POSTGRES_PORT')),
-            username: this.get<string>('POSTGRES_USER'),
-            password: this.get<string>('POSTGRES_PASSWORD'),
-            database: this.get<string>('POSTGRES_DATABASE'),
-            entities: [UserEntity, WorkspaceEntity, ProjectEntity, TaskEntity],
-            migrationsTableName: 'migration',
-            migrations: [__dirname + '/src/migrations/*.ts'],
-            autoLoadEntities: true,
-            synchronize: true,
-            ssl: this.isProduction()
-        };
     }
 }
 

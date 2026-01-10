@@ -13,6 +13,7 @@ import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 
 import {TaskDto} from './dto/task.dto';
+import {UpdateTaskDto} from './dto/update-task.dto';
 import {TaskEntity} from './entities/task.entity';
 import {GetAllQueryDto} from './query/get-all-query.dto';
 import {TaskService} from './task.service';
@@ -41,7 +42,7 @@ export class TaskController {
     @Patch(':id')
     public updateOne(
         @Param('id') id: string,
-        @Body() dto: TaskDto
+        @Body() dto: UpdateTaskDto
     ): Promise<TaskEntity> {
         return this.taskService.updateTask(dto, id);
     }

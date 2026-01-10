@@ -29,7 +29,13 @@ async function bootstrap() {
     SwaggerModule.setup('documentation', app, documentFactory);
 
     app.setGlobalPrefix('/api/v1');
-    app.useGlobalPipes(new ValidationPipe({transform: true}));
+    app.useGlobalPipes(
+        new ValidationPipe({
+            transform: true,
+            skipMissingProperties: true,
+            whitelist: true
+        })
+    );
     app.useGlobalFilters(new HttpExceptionFilter());
 
     app.enableCors({

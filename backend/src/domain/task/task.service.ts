@@ -7,11 +7,13 @@ import {
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 
+import {StatusEntity} from '@/domain/status/entities/status.entity';
 import {PageMetaDto} from '@/shared/dto/page-meta.dto';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
 import {PageDto} from '@/shared/dto/page.dto';
 
 import {ProjectEntity} from '../project/entities/project.entity';
+import {UserEntity} from '../user/entities/user.entity';
 
 import {TaskDto} from './dto/task.dto';
 import {UpdateTaskDto} from './dto/update-task.dto';
@@ -24,7 +26,11 @@ export class TaskService {
         @InjectRepository(TaskEntity)
         private readonly taskRepository: Repository<TaskEntity>,
         @InjectRepository(ProjectEntity)
-        private readonly projectRepository: Repository<ProjectEntity>
+        private readonly projectRepository: Repository<ProjectEntity>,
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>,
+        @InjectRepository(StatusEntity)
+        private readonly statusRepository: Repository<StatusEntity>
     ) {}
 
     public async getAllTasks(
@@ -44,7 +50,7 @@ export class TaskService {
                     })
                 }
             ],
-            relations: {project: true}
+            relations: {project: true, assignee: true, status: true}
         });
 
         const itemCount = await this.taskRepository.count({
@@ -57,7 +63,14 @@ export class TaskService {
     }
 
     public async getTaskById(id: string): Promise<TaskEntity> {
-        const existingEntity = await this.taskRepository.findOneBy({id});
+        const existingEntity = await this.taskRepository.findOne({
+            where: {id},
+            relations: {
+                assignee: true,
+                project: true,
+                status: true
+            }
+        });
 
         if (!existingEntity) {
             throw new NotFoundException('Task not found.');
@@ -95,15 +108,67 @@ export class TaskService {
         dto: UpdateTaskDto,
         id: string
     ): Promise<TaskEntity> {
-        const existingEntity = await this.taskRepository.findOneBy({id});
+        const existingEntity = await this.taskRepository.findOne({
+            where: {id},
+            relations: {
+                assignee: true,
+                status: true,
+                project: true
+            }
+        });
 
         if (!existingEntity) {
             throw new NotFoundException('Task not found.');
         }
 
+        let toInsert: {
+            assignee?: UserEntity;
+            project?: ProjectEntity;
+            status?: StatusEntity;
+        } = {};
+
+        if (dto.assigneeId) {
+            const existingAssignee = await this.userRepository.findOneBy({
+                id: dto.assigneeId
+            });
+
+            if (!existingAssignee) {
+                throw new NotFoundException('Assignee not found.');
+            }
+
+            toInsert = {...toInsert, assignee: existingAssignee};
+        }
+
+        if (dto.projectId) {
+            const existingProject = await this.projectRepository.findOneBy({
+                id: dto.projectId
+            });
+
+            if (!existingProject) {
+                throw new NotFoundException('Project not found.');
+            }
+
+            toInsert = {...toInsert, project: existingProject};
+        }
+
+        if (dto.statusId) {
+            const existingStatus = await this.statusRepository.findOneBy({
+                id: dto.statusId
+            });
+
+            if (!existingStatus) {
+                throw new NotFoundException('Status not found.');
+            }
+
+            toInsert = {...toInsert, status: existingStatus};
+        }
+
         const updatedEntity = await this.taskRepository.save({
             ...existingEntity,
-            ...dto
+            ...dto,
+            ...(toInsert.assignee ? {assignee: toInsert.assignee} : {}),
+            ...(toInsert.project ? {project: toInsert.project} : {}),
+            ...(toInsert.status ? {status: toInsert.status} : {})
         });
 
         return updatedEntity;
