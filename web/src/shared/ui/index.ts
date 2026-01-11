@@ -17,3 +17,5 @@ export * from './label';
 export * from './toast';
 export * from './tabs';
 export * from './table';
+export * from './popover';
+export * from './command';

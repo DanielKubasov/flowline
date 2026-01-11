@@ -1,6 +1,6 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {ILike, Repository} from 'typeorm';
 
 import {PageMetaDto} from '@/shared/dto/page-meta.dto';
 import {PageOptionsDto} from '@/shared/dto/page-options.dto';
@@ -24,7 +24,13 @@ export class UserService {
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true, isArchived: false}]
+            where: [
+                {
+                    username: ILike(`%${pageOptionsDto.search}%`),
+                    isActive: true,
+                    isArchived: false
+                }
+            ]
         });
 
         const itemCount = await this.userRepository.count({
