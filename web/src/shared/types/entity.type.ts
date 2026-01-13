@@ -1,4 +1,5 @@
 type EntityType = {
+    id: string;
     isArchived: boolean;
     isActive: boolean;
     createdAt: Date;

@@ -1,24 +1,26 @@
 import {$clientFetch} from '@/shared/api';
 import {ApiError} from '@/shared/errors';
 
-import type {PaginatedApiResponse, PaginatedMeta} from '@/shared/api/types';
+import type {PaginatedApiResponse} from '@/shared/api/types';
 import type {UserType} from '../types/user.type';
-import type {UserOptions} from '../types/user-options.type';
-
-type GetAllUsersOptions = Pick<PaginatedMeta, 'page' | 'take' | 'search'> &
-    UserOptions;
+import type {UserPaginationType} from '../types/user-pagination.type';
 
 function userApi() {
     const getAllUsers = async ({
         page,
         take,
-        search,
-        assigneeId
-    }: GetAllUsersOptions): Promise<PaginatedApiResponse<UserType>> => {
+        search
+    }: UserPaginationType): Promise<PaginatedApiResponse<UserType>> => {
         try {
-            const url = `/users?take=${take}&page=${page}&assigneeId=${assigneeId}&search=${search}`;
+            const params = new URLSearchParams({
+                page: page ? page.toString() : '1',
+                take: take ? take.toString() : '10',
+                ...(search ? {search: search.toString()} : {})
+            });
 
-            const res = await $clientFetch(url.toString(), {
+            const url = '/users?' + params.toString();
+
+            const res = await $clientFetch(url, {
                 next: {
                     tags: ['users']
                 }

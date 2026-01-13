@@ -4,21 +4,34 @@ import {API_URL} from '@/shared/constants';
 
 import {cookies} from 'next/headers';
 
+async function $preInterceptor(config?: RequestInit): Promise<RequestInit> {
+    const store = await cookies();
+    const token = store.get('accessToken')?.value;
+
+    return {
+        ...config,
+        headers: {Authorization: `Bearer ${token}`}
+    };
+}
+
+async function $postInterceptor(res: Response): Promise<Response> {
+    switch (res.status) {
+        case 401:
+            await fetch('/api/auth/sign-out', {
+                method: 'POST'
+            });
+    }
+
+    return res;
+}
+
 const $serverFetch = async <T>(
     url: string,
     options?: RequestInit
 ): Promise<Response> => {
-    const store = await cookies();
-    const token = store.get('accessToken')?.value;
-
-    const apiUrl = API_URL + url;
-    const headers = {Authorization: `Bearer ${token}`};
-    const config = {
-        headers,
-        ...options
-    };
-
-    return fetch(apiUrl, config);
+    return $postInterceptor(
+        await fetch(API_URL + url, await $preInterceptor(options))
+    );
 };
 
 export {$serverFetch};

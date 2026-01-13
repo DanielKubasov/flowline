@@ -16,6 +16,7 @@ import {ProjectDto} from './dto/project.dto';
 import {UpdateProjectDto} from './dto/update-project.dto';
 import {ProjectEntity} from './entities/project.entity';
 import {ProjectService} from './project.service';
+import {GetAllQueryDto} from './query/get-all-query.dto';
 
 @Controller('projects')
 export class ProjectController {
@@ -23,7 +24,7 @@ export class ProjectController {
 
     @Get()
     public getAll(
-        @Query() query: PageOptionsDto
+        @Query() query: PageOptionsDto & GetAllQueryDto
     ): Promise<PageDto<ProjectEntity>> {
         return this.projectService.getAllProjects(query);
     }

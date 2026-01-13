@@ -1,6 +1,5 @@
 import type {Metadata} from 'next';
 
-// @ts-expect-error - This line will contain an error
 import '@/core/styles/index.css';
 
 import {Google_Sans_Flex} from 'next/font/google';

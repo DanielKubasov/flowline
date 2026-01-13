@@ -1,6 +1,6 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {ILike, Repository} from 'typeorm';
 
 import {WorkspaceEntity} from '@/domain/workspace/entities/workspace.entity';
 import {PageMetaDto} from '@/shared/dto/page-meta.dto';
@@ -10,6 +10,7 @@ import {PageDto} from '@/shared/dto/page.dto';
 import {ProjectDto} from './dto/project.dto';
 import {UpdateProjectDto} from './dto/update-project.dto';
 import {ProjectEntity} from './entities/project.entity';
+import {GetAllQueryDto} from './query/get-all-query.dto';
 
 @Injectable()
 export class ProjectService {
@@ -21,20 +22,28 @@ export class ProjectService {
     ) {}
 
     public async getAllProjects(
-        pageOptionsDto: PageOptionsDto
+        pageOptionsDto: PageOptionsDto & GetAllQueryDto
     ): Promise<PageDto<ProjectEntity>> {
+        const options = {
+            isActive: true,
+            isArchived: false,
+            ...(pageOptionsDto?.search && {
+                name: ILike(`%${pageOptionsDto.search}%`)
+            })
+        };
+
         const projects = await this.projectRepository.find({
             take: pageOptionsDto.take,
             skip: pageOptionsDto.skip,
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [{isActive: true, isArchived: false}],
+            where: [options],
             relations: {workspace: true}
         });
 
         const itemCount = await this.projectRepository.count({
-            where: [{isActive: true}, {isArchived: false}]
+            where: [options]
         });
 
         const pageMetaDto = new PageMetaDto({itemCount, pageOptionsDto});

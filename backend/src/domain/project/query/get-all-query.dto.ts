@@ -4,9 +4,5 @@ import {IsUUID} from 'class-validator';
 export class GetAllQueryDto {
     @IsUUID()
     @ApiProperty()
-    public projectId: string;
-
-    @IsUUID()
-    @ApiProperty()
-    public assigneeId: string;
+    public search: string;
 }

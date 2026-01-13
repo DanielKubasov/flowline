@@ -1,30 +1,34 @@
 'use client';
 
-import {API_URL} from '../constants';
+import {API_URL} from '@/shared/constants';
 
-export const getClientSideCookie = (name: string): string | undefined => {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`${name}=`))
-        ?.split('=')[1];
+import {getCookie} from '@/shared/utils';
 
-    return cookieValue;
-};
+async function $preInterceptor(config?: RequestInit): Promise<RequestInit> {
+    return {
+        ...config,
+        headers: {Authorization: `Bearer ${getCookie('accessToken')}`}
+    };
+}
 
-const $clientFetch = async <T>(
+async function $postInterceptor(res: Response): Promise<Response> {
+    switch (res.status) {
+        case 401:
+            await fetch('/api/auth/sign-out', {
+                method: 'POST'
+            });
+    }
+
+    return res;
+}
+
+const $clientFetch = async (
     url: string,
     options?: RequestInit
 ): Promise<Response> => {
-    const token = getClientSideCookie('accessToken');
-    const apiUrl = API_URL + url;
-    const headers = {Authorization: `Bearer ${token}`};
-
-    const config = {
-        headers,
-        ...options
-    };
-
-    return fetch(apiUrl, config);
+    return $postInterceptor(
+        await fetch(API_URL + url, await $preInterceptor(options))
+    );
 };
 
 export {$clientFetch};

@@ -36,25 +36,29 @@ export class TaskService {
     public async getAllTasks(
         pageOptionsDto: PageOptionsDto & GetAllQueryDto
     ): Promise<PageDto<TaskEntity>> {
+        const options = {
+            isActive: true,
+            isArchived: false,
+            ...(pageOptionsDto?.projectId && {
+                project: {id: pageOptionsDto.projectId}
+            }),
+            ...(pageOptionsDto?.assigneeId && {
+                assignee: {id: pageOptionsDto.assigneeId}
+            })
+        };
+
         const tasks = await this.taskRepository.find({
             take: pageOptionsDto.take,
             skip: pageOptionsDto.skip,
             order: {
                 createdAt: pageOptionsDto.order
             },
-            where: [
-                {
-                    isActive: true,
-                    ...(pageOptionsDto?.projectId && {
-                        project: {id: pageOptionsDto.projectId}
-                    })
-                }
-            ],
+            where: [options],
             relations: {project: true, assignee: true, status: true}
         });
 
         const itemCount = await this.taskRepository.count({
-            where: [{isActive: true}, {isArchived: false}]
+            where: [options]
         });
 
         const pageMetaDto = new PageMetaDto({itemCount, pageOptionsDto});

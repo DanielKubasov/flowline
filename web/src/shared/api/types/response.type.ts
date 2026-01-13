@@ -6,7 +6,6 @@ type PaginatedApiResponse<T> = {
 type PaginatedMeta = {
     page: number;
     take: number;
-    search: string;
     itemCount: number;
     pageCount: number;
     hasNextPage: boolean;

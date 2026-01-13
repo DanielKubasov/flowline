@@ -1,5 +1,5 @@
 async function Page() {
-    return <div>Dashboard page</div>;
+    return <div>Dashboard</div>;
 }
 
 export default Page;
