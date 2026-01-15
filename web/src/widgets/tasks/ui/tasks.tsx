@@ -16,19 +16,22 @@ import {
     PaginationPrevious
 } from '@/shared/ui';
 
+import type {PaginatedApiResponse} from '@/shared/api/types';
+
 import type {TaskPaginationType, TaskType} from '@/entities/task';
 import type {UserPaginationType, UserType} from '@/entities/user';
+import type {ProjectPaginationType, ProjectType} from '@/entities/project';
+
+import {columns, TasksTable} from '@/features/tasks/table';
 
 import type {TasksContextType} from '../types/context.type';
 
 import {TAB_ITEMS, TAB_VALUES} from '../constants';
-import {DataTable} from './table';
-import {columns} from '../table/columns';
+
 import {tasksApi} from '../api';
-import {Assignee} from './assignee';
-import {PaginatedApiResponse} from '@/shared/api/types';
-import {ProjectPaginationType, ProjectType} from '@/entities/project';
-import {Project} from './project';
+
+import {Assignee} from './filters/assignee';
+import {Project} from './filters/project';
 
 const TasksContext = createContext<TasksContextType>({} as TasksContextType);
 
@@ -170,7 +173,7 @@ const Tasks = () => {
                     </TabsList>
 
                     <TabsContent value={TAB_VALUES.table}>
-                        <DataTable columns={columns} data={tasks.data} />
+                        <TasksTable columns={columns} data={tasks.data} />
 
                         {tasks?.meta?.itemCount > tasksOptions.take && (
                             <Pagination className='justify-start mt-8'>

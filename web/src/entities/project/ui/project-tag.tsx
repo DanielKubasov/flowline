@@ -9,7 +9,7 @@ type ProjectTagProps = {
 const ProjectTag = ({project}: ProjectTagProps) => {
     return (
         <Link
-            href={`/projects/${project.id}`}
+            href={`/app/projects/${project.id}`}
             className='flex items-center gap-2'
         >
             <Avatar className='w-8 h-8 rounded-full'>
