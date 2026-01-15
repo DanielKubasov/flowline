@@ -6,15 +6,15 @@ import type {UserType} from '../types/user.type';
 import type {UserPaginationType} from '../types/user-pagination.type';
 
 function userApi() {
-    const getAllUsers = async ({
-        page,
-        take,
-        search
-    }: UserPaginationType): Promise<PaginatedApiResponse<UserType>> => {
+    const getAllUsers = async (
+        options: UserPaginationType
+    ): Promise<PaginatedApiResponse<UserType>> => {
+        const {take, skip, search} = options;
+
         try {
             const params = new URLSearchParams({
-                page: page ? page.toString() : '1',
-                take: take ? take.toString() : '10',
+                take: take ? String(take) : String(0),
+                skip: take ? String(skip) : String(skip),
                 ...(search ? {search: search.toString()} : {})
             });
 

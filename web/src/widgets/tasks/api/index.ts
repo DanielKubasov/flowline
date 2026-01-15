@@ -11,16 +11,17 @@ function tasksApi() {
     const getAllTasks = async (
         options: TaskPaginationType
     ): Promise<PaginatedApiResponse<TaskType>> => {
+        const {take, page, assigneeId, projectId} = options;
+
+        const assignee = {assigneeId: String(assigneeId)};
+        const project = {projectId: String(projectId)};
+
         try {
             const params = new URLSearchParams({
-                page: options.page ? options.page.toString() : '1',
-                take: options.take ? options.take.toString() : '10',
-                ...(options.assigneeId
-                    ? {assigneeId: options.assigneeId.toString()}
-                    : {}),
-                ...(options.projectId
-                    ? {projectId: options.projectId.toString()}
-                    : {})
+                page: page ? String(page) : String(0),
+                take: take ? String(take) : String(10),
+                ...(assigneeId ? assignee : {}),
+                ...(projectId ? project : {})
             });
 
             const url = '/tasks?' + params.toString();

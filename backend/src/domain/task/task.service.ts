@@ -36,22 +36,23 @@ export class TaskService {
     public async getAllTasks(
         pageOptionsDto: PageOptionsDto & GetAllQueryDto
     ): Promise<PageDto<TaskEntity>> {
+        const {take, page, projectId, assigneeId, order} = pageOptionsDto;
+
+        const project = {project: {id: projectId}};
+        const assignee = {assignee: {id: assigneeId}};
+
         const options = {
             isActive: true,
             isArchived: false,
-            ...(pageOptionsDto?.projectId && {
-                project: {id: pageOptionsDto.projectId}
-            }),
-            ...(pageOptionsDto?.assigneeId && {
-                assignee: {id: pageOptionsDto.assigneeId}
-            })
+            ...(projectId && project),
+            ...(assigneeId && assignee)
         };
 
         const tasks = await this.taskRepository.find({
-            take: pageOptionsDto.take,
-            skip: pageOptionsDto.skip,
+            take,
+            skip: (page - 1) * take,
             order: {
-                createdAt: pageOptionsDto.order
+                createdAt: order
             },
             where: [options],
             relations: {project: true, assignee: true, status: true}
