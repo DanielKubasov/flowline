@@ -10,7 +10,10 @@ async function $preInterceptor(config?: RequestInit): Promise<RequestInit> {
 
     return {
         ...config,
-        headers: {Authorization: `Bearer ${token}`}
+        headers: {
+            Authorization: `Bearer ${token}`,
+            ContentType: 'application/json'
+        }
     };
 }
 

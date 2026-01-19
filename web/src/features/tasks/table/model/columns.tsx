@@ -1,7 +1,9 @@
 import {ProjectTag} from '@/entities/project';
 import {TaskType} from '@/entities/task';
 import {UserTag} from '@/entities/user';
+import {Button} from '@/shared/ui';
 import {ColumnDef} from '@tanstack/react-table';
+import Link from 'next/link';
 
 const columns: ColumnDef<TaskType>[] = [
     {
@@ -57,6 +59,15 @@ const columns: ColumnDef<TaskType>[] = [
                         : 'No due date'}
                 </div>
             );
+        }
+    },
+    {
+        accessorKey: '',
+        header: 'Overview',
+        cell({row}) {
+            const id = row?.original?.id;
+
+            return <Link href={`/app/tasks/${id}`}>More...</Link>;
         }
     }
 ];

@@ -168,6 +168,8 @@ export class TaskService {
             toInsert = {...toInsert, status: existingStatus};
         }
 
+        console.log(dto);
+
         const updatedEntity = await this.taskRepository.save({
             ...existingEntity,
             ...dto,

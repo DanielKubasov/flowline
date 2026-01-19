@@ -28,6 +28,10 @@ export class TaskEntity extends BaseEntity {
     @ApiProperty()
     public description: string;
 
+    @Column({type: 'jsonb', nullable: true})
+    @ApiProperty()
+    public overview: string;
+
     @Column({type: 'timestamptz', nullable: true})
     @ApiProperty()
     public dueDate: Date;

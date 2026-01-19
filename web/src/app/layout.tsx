@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en' className={`antialiased ${googleSansFlex.className}`}>
-            <body className='h-screen flex'>{children}</body>
+            <body className='relative flex'>{children}</body>
         </html>
     );
 }

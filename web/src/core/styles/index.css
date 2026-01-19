@@ -137,3 +137,9 @@ body {
 .container {
   @apply px-6
 }
+
+.tiptap {
+  padding: 0 !important;
+  padding-inline: 8px;
+  padding-top: 32px !important;
+}

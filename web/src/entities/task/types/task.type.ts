@@ -5,6 +5,7 @@ import type {EntityType} from '@/shared/types/entity.type';
 type TaskType = {
     name: string;
     description: string;
+    overview: string;
     dueDate: Date;
     project: ProjectType;
     assignee: UserType;

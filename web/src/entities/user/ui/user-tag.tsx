@@ -8,7 +8,10 @@ type UserTagProps = {
 
 const UserTag = ({user}: UserTagProps) => {
     return (
-        <Link href={`/users/${user.id}`} className='flex items-center gap-2'>
+        <Link
+            href={`/app/users/${user.id}`}
+            className='flex items-center gap-2'
+        >
             <Avatar className='w-8 h-8 rounded-full'>
                 <AvatarImage src='' alt='@shadcn' />
                 <AvatarFallback>

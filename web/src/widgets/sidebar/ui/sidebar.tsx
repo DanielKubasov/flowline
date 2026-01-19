@@ -11,7 +11,7 @@ import {Tag} from './tag';
 
 const Sidebar = () => {
     return (
-        <aside className='flex flex-col w-64 p-3 gap-3 bg-background-dark'>
+        <aside className='fixed h-screen w-64 p-3 flex flex-col gap-3 bg-background-dark'>
             <Separator />
             <Tag>Workspaces</Tag>
             <Group></Group>

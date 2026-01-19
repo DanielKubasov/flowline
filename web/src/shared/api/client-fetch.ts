@@ -7,7 +7,10 @@ import {getCookie} from '@/shared/utils';
 async function $preInterceptor(config?: RequestInit): Promise<RequestInit> {
     return {
         ...config,
-        headers: {Authorization: `Bearer ${getCookie('accessToken')}`}
+        headers: {
+            Authorization: `Bearer ${getCookie('accessToken')}`,
+            'Content-Type': 'application/json'
+        }
     };
 }
 

@@ -20,3 +20,4 @@ export * from './table';
 export * from './popover';
 export * from './command';
 export * from './pagination';
+export * from './card';

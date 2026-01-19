@@ -1,6 +1,7 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {
     IsDateString,
+    IsJSON,
     IsNotEmpty,
     IsOptional,
     IsString,
@@ -19,6 +20,11 @@ export class TaskDto implements Partial<TaskEntity> {
     @IsOptional()
     @ApiProperty()
     public description: string;
+
+    @IsJSON()
+    @IsOptional()
+    @ApiProperty()
+    public overview: string;
 
     @IsDateString()
     @IsOptional()
