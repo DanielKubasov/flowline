@@ -13,7 +13,7 @@ import {IS_PUBLIC_KEY} from '@/shared/decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(
+    public constructor(
         private readonly jwtService: JwtService,
         private readonly reflector: Reflector
     ) {}
@@ -21,20 +21,16 @@ export class AuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
 
-        const token = this.extractTokenFromHeader(request);
-
         const isPublic = this.reflector.getAllAndOverride<boolean>(
             IS_PUBLIC_KEY,
             [context.getHandler(), context.getClass()]
         );
 
-        if (isPublic) {
-            return true;
-        }
+        if (isPublic) return true;
 
-        if (!token) {
-            throw new UnauthorizedException();
-        }
+        const token = this.extractToken(request);
+
+        if (!token) throw new UnauthorizedException();
 
         try {
             const payload = await this.jwtService.verifyAsync(token, {
@@ -42,14 +38,15 @@ export class AuthGuard implements CanActivate {
             });
 
             request['user'] = payload;
-        } catch {
+        } catch (err: unknown) {
+            console.log(err);
             throw new UnauthorizedException('Invalid credentials.');
         }
 
         return true;
     }
 
-    private extractTokenFromHeader(request: Request): string | undefined {
+    public extractToken(request: Request): string | undefined {
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Bearer' ? token : undefined;
     }
